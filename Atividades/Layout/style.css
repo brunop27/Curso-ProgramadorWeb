@@ -1,0 +1,55 @@
+#site{
+    margin: auto;
+    width: 100%;
+    max-width: 1024px;
+    min-width: 500px;    
+}
+
+#site header{
+    height: 60px;
+    background-color: brown;
+}
+
+#site nav{
+    width: 60%;
+    height: 400px;
+    background-color: crimson;
+    float: left;
+}
+
+#site aside{
+    width: 40%;
+    height: 400px;
+    background-color: burlywood;
+    float: left;
+}
+
+#site footer{
+    height: 60px;
+    background-color: blue;
+    clear: both;
+}
+
+@media screen and (max-width:500px){
+    #site{
+        width: 100%;
+        min-width: auto;
+    }
+
+    #site nav{
+        width: 100%;
+        float: none;
+        height: 50px;
+    }
+
+    #site aside{
+        width: 100%;
+        float: none;
+        height: 50px;
+
+    }
+    
+    #site footer{
+        width: 100%;
+    }
+}
