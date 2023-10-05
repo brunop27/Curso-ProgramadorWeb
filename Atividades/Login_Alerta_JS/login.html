@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Login - Alert</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body,html{
+          	width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin:0;
+            padding:0;
+			background: #112;
+		}
+
+		.container{
+			background-color: #515151;
+            border: 5px solid gray;
+            border-radius: 10px;
+            color:white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            padding: 5px;
+            width: 100%;
+            max-width: 500px;
+		}
+
+		.container label{
+            margin-bottom:15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            width: 70%;
+        }
+
+        .container label input{
+            margin-top:5px;
+            border-radius: 8px;
+            height: 30px;
+            width: 100%;
+        }
+
+        .container button{
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: 20px;
+            width: 50%;
+            cursor: pointer;     
+        }
+
+        .container .msg{
+            background-color: greenyellow;
+            color: green;
+            border: 3px solid green;
+            width: 70%;
+            padding:10px;
+            display: flex;
+        }
+
+        .container .erro{
+            background-color: pink;
+            color: red;
+            border-color:red;
+        }
+	</style>
+
+</head>
+<body>
+	<div class="container">
+        <h1>Login</h1>
+        
+        <label>
+            Login:
+            <input type="text" name="usuario" id="login">
+        </label>
+        <label>
+            Senha:
+            <input type="text" name="senha" id="senha">
+        </label>
+        <!-- onclick é uma função nativa que ativa alguma função que estiver dentro dela, nesse caso, ao clicar ela chama a função logar -->
+        <button type="submit" class="btn" onclick="logar()">Logar</button>
+    </div>
+    <script>
+    	//Instancia as variaveis para receber as propriedades dos respectivos elementos no html
+    	let h1 = document.getElementsByTagName('h1')[0];
+		let usuario = document.getElementById('login');
+		let senha = document.getElementById('senha');
+
+		function logar(){
+
+			//verifica se os input estão vazio 
+			if (usuario.value=="") {
+				//Altera o valor da borda do input pela propriedade 'border'
+				usuario.style.borderColor = 'red';
+			}
+
+			if (senha.value=="") {
+				senha.style.borderColor = 'red';
+			}
+
+			setTimeout(function(){
+    			usuario.style.borderColor = '';
+    			senha.style.borderColor = '';
+    		}, 2000);
+
+			//Verifica o valor do campo input, chamando as devidas funções para criação dos alertas
+			if (usuario.value=='Adm' && senha.value=='12345') {
+				//chama função sucesso passando a mensagem de sucesso como parametro
+				sucesso('Bem Vindo!');
+			}else{
+				erro('Login Invalido!');
+			}
+
+		}
+
+    	function criAlerta(msg, tipo = 'sucesso'){
+    		//instancia uma variavel que recebe um elemento criado, no caso um 'h3'
+    		let h3 = document.createElement('h3');
+
+    		//Adiciona a classe 'msg' pelo 'h3' instanciado, no caso, adiciona a classe na tag 'h3' criado acima.
+    		//Ps: A classe 'msg' é somente para aplicar a formatação que está no CSS
+    		h3.classList.add('msg');
+
+    		let img = document.createElement('img');
+    		img.src = 'success.png';
+
+    		let texto = document.createElement('div');
+    		//Altera o texto no html, da div recebida/criada na variavel 'texto' de acordo com a mensagem recebida pelo parametro
+    		texto.textContent = msg;
+
+    		if (tipo == 'erro') {
+    			img.src ='error.png';
+    			h3.classList.add("erro");
+    		}
+
+    		//Adiciona o elemento dentro da tag
+    		h3.appendChild(img);
+    		h3.appendChild(texto);
+
+    		//Adiciona h3 após o elemento h1
+    		h1.insertAdjacentElement("afterend",h3);
+
+    		//Função nativa que executa determinada função a X segundos, neste caso, a cada 2 segundos, ela remove o h3 criado pela função criAlerta();
+    		setTimeout(function(){
+    			h3.remove()
+    		}, 2000);
+
+    		return h3;
+    	}
+
+    	//Função que recebe a mensagem de 'Bem vindo' por meio de parametro e retorna para a função criAlerta() para criar o elemento com a mensagem passada
+    	function sucesso(text){
+    			return criAlerta(text);
+    		}
+
+    	//Função que recebe a mensagem de 'Login invalido' por meio de parametro e retorna para a função criAlerta() para criar o elemento com a mensagem passada, passando tambem um segundo parametro 'erro' que servirá de complemento para criação do elemento 'erro' na tela
+    	function erro(text){
+    		return criAlerta(text, 'erro');
+    	}
+    </script>
+</body>
+</html>
