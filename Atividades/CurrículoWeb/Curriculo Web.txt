@@ -1,0 +1,2 @@
+Projeto "Curriculo web" utilizando HTML, CSS. Desenvolvido no Curso Fic Programador Web, ofertado pelo Instituto Federal do Tocantins. 
+Sendo orientado pelo professor Joaquim Scavone. Com objetivo de mostrar montar um curriculo pessoal, aplicando o que foi aprendido durante as aulas de HTML e CSS

@@ -1,0 +1,54 @@
+.circulo, .circulo::before{
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	border-top: 20px solid #f8d33b;
+	border-right: 20px solid #f8d33b;
+	border-bottom: 20px solid white;
+	border-left: 20px solid white;
+	color: #f8d33b;
+	font-size: 24px;
+	line-height: 45px;
+	text-align: center;
+	transform: rotate(45deg);
+	position: relative;
+	padding: 0;
+	margin: 0;
+}
+
+.temp{
+	margin: 200px auto;
+}
+.circulo::before{
+	content: '';
+	position: absolute;
+	top: -20px;
+	left: -20px;
+	transform: rotate(0);
+	border-bottom-color: transparent;
+	border-left-color: transparent;
+	width: 100%;
+	height: 100%;
+}
+.circulo.p95::before{
+	transform: rotate(calc((180deg*(95 - 50))/ 50));
+}
+.circulo.p90::before{
+	transform: rotate(calc((180deg*(90 - 50))/ 50));
+}
+.circulo.p85::before{
+	transform: rotate(calc((180deg*(85 - 50))/ 50));
+}
+.circulo.p80::before{
+	transform: rotate(calc((180deg*(80 - 50))/ 50));
+}
+.circulo>span{
+	transform: rotate(-45deg);
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100px;
+	height: 100px;
+	text-align: center;
+}

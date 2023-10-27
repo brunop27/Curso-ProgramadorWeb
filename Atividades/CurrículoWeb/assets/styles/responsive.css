@@ -1,0 +1,40 @@
+@media only screen and (max-width: 720px){
+	#about{
+		flex-direction: column;
+		text-align: center;
+	}
+
+	#about .description>*{
+		width: 100%;
+	}
+
+	#about .description>h1, 
+	#about .description>h4{
+		text-align: center;
+	}
+
+	#contact{
+		width: 100%;
+		height: auto;
+		border: none;
+	}
+
+	#education{
+		width: 100%;
+		border-left: none;
+	}
+
+	#education .legend{
+		width: 450px;
+		left: calc(50% - 225px);
+		text-align: center;
+
+	}
+
+	#education ul li.curso{
+		max-width: none;
+		width: 100%;
+		text-align: center;
+	}
+	
+}

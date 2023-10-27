@@ -1,0 +1,212 @@
+:root{
+	--cor1: #000;
+	--cor2: #2e2e2e;
+	--cor3: #f8d33b;
+	--cor4: #f5fced;
+}
+
+*{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	box-sizing: border-box;
+}
+
+.m-10{
+	margin: 10px;
+}
+
+html, body{
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+h1{
+	font-size: 2em;
+}		
+
+#page{
+	max-width: 1090px;
+	width: 100%;
+	margin: 20px auto;
+	background-color: var(--cor2);
+	min-height: 600px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+section{
+	background-color: transparent;
+	min-height: 300px;
+	position: relative;
+	padding: 50px;
+	
+}
+
+
+
+section>.legend{
+	width: 450px;
+	height: 68px;
+	border-radius: 12px;
+	background-color: var(--cor3);
+	padding-left: 15px;
+	line-height: 68px;
+	font-weight: bold;
+	font-size: 1.5em;
+	position: absolute;
+	top: -38px;
+	left: calc(50% - 225px);
+	text-align: center;
+
+}
+
+section li{
+	margin: 20px;
+
+}
+
+section li>h4{
+	color: var(--cor4);
+}
+
+section li>h5{
+	color: var(--cor3);
+}
+
+section li>h6{
+	color: var(--cor4);
+}
+
+#about{
+	width: 100%;
+	padding: 0;
+}
+
+#about, #exp{
+	background-color: var(--cor1);
+	min-height: 300px;
+	display: flex;
+}
+
+#about .description{
+	color: var(--cor4);	
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	text-align: justify;
+	padding: 40px;
+}
+
+#about .description>h1{
+	color: var(--cor3);
+
+}
+
+#about .profile img{
+	max-width: 400px;
+}
+
+.row{
+	display: flex;
+	flex-wrap: wrap;
+
+}
+
+#contact{
+	width: 30%;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	color: var(--cor4);
+	height: 100%;
+	padding: 30px;
+	border: 2px solid var(--cor3);
+	border-left: none;
+
+}
+
+#contact>*{
+	padding: 10px;
+
+}
+
+#contact>h3, #contact label{
+	color: var(--cor3);
+	margin: 10px;
+	display: inline-block;
+	width: 100%;
+
+}
+
+#contact a, #contact a:visited{
+	color: var(--cor4);
+}
+
+#education{
+	width: 70%;
+	border: 2px solid var(--cor3);
+
+}
+#education>.legend{
+	left: auto;
+	text-align: left;
+	width: 320px;
+}
+
+#education ul{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#education ul li{
+	min-width: 200px;
+	max-width: 250px;
+}
+
+#exp ul{
+	display: flex;
+	flex-wrap: wrap;
+	text-align: center;
+	align-items: center;
+	justify-content: space-evenly;
+}
+
+#exp ul li{
+	width: calc(33% - 45px);
+	min-width: 250px;
+	padding: 5px;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+#exp ul li h5, #exp ul li h4{
+	text-align: center;
+	color: var(--cor4);
+	margin: 10px;
+}
+
+#skill{
+	width: 100%;
+}
+#skill ul{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	width: 100%;
+}
+
+#skill>ul>li{
+	height: 130px;
+	display: flex;
+	flex-direction: column;
+	color: white;
+	align-items: center;
+	font-weight: bold;
+	justify-content: space-between;
+}
