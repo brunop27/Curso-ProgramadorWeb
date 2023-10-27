@@ -1,21 +1,25 @@
+/* Resetando margin e padding de todos os elementos */
 *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+/* Config geral */
 body,html{
     width: 100%;
     height: 100%;
 }
 
+/* Modificando o tamanho do texto "Game Over" */
 #painel>h5{
     font-size: 2em;
     color: red;
 }
 
+/* Estilo geral da pontuação */
 #placar{
-    background-color: white;
+    background-color: #fffA;
     position: fixed;
     right: 0;
     top: 0;
@@ -27,6 +31,7 @@ body,html{
     font-size: 18px;
 }
 
+/* Estilo do numero da pontuação */
 #placar>span{
     font-size: 2em;
 }

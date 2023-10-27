@@ -11,7 +11,6 @@
 <body>
     <!-- START effect particle background -->
     <div class="page-bg"></div>
-
     <div class="animation-wrapper">
         <div class="particle particle-1"></div>
         <div class="particle particle-2"></div>
@@ -19,18 +18,23 @@
         <div class="particle particle-4"></div>
     </div>   
     <!-- END effect particle background -->
-        <div class="page-wrapper">
-            <div id="painel">
-                <h4>Star Wars</h4>
-                <h5>Game Over</h5>
-                <span>Aperte Enter</span>
-            </div>
+
+    <!-- Painel Start -->
+    <div class="page-wrapper">
+        <div id="painel">
+            <h4>Star Wars</h4>
+            <!-- Tag onde aparecerá o GameOver/Pause -->
+            <h5 class="msg"></h5>
+            <span>Aperte Enter</span>
         </div>
-        <div id="placar">
-            Pontuação
-            <span>
-                0
-            </span>
-        </div>
+    </div>
+    <div id="placar">
+        Pontuação
+        <span>
+            0
+        </span>
+    </div>
+    <!-- Painel End -->
+    <script src="assets/scripts/main.js"></script>
 </body>
 </html>
