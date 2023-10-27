@@ -35,3 +35,9 @@ body,html{
 #placar>span{
     font-size: 2em;
 }
+
+/* Config da nave Player, usado Zindex=3 para evitar contato com background */
+.nave{
+	position: fixed;
+	z-index: 3;	
+} 
