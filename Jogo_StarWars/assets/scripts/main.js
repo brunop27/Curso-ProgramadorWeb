@@ -4,17 +4,33 @@ const tela = document.getElementsByTagName("body")[0];
 const game = new Game();
 //Instancia da variável que criará a nave
 let nave;
+const velocMovimento = 10;
 
 
 //adicionando um evento á variavel “tela” com ‘keyup’ que recebe o valor do Enter quando clicado pelo usuario
-tela.addEventListener("keyup", function (event){
-	if(event.key == "Enter"){
+tela.addEventListener('keyup', function (event){
+	if(event.key == 'Enter'){
 	//Chama o método isPause(), que retorna true/false, indicando se o jogo tá pausado ou não. Se for false, ele chama o método .start(), Se retornar true, chama o método pause()	
     (game.isPause())? game.start():game.pause("Pause");	
-	}else{
+	}else if(event.key == 'p'){
 	game.pause("Pause");
     }
 });
+
+//Adicionando evento de tecla pressionada para movimentação da nave do jogador
+tela.addEventListener('keydown', function(event){
+    //Condição para saber se o jogo ta pausado, se não tiver, o jogador pode mexer a nave
+    if(!game.isPause()){
+        //Movimento da nave esquerdo e direito
+        if(event.key == 'ArrowLeft'){
+            //Variável "velocMovimento" será usada para mover a nave para esquerda(-) e direita(+)
+            //Chama o objeto nave e acessa seu método setXY, lançando os valores da nave como parâmetro, passando o valor nave.X() para posição horizontal, e nave.Y() para vertical(valor fixo)
+            nave.setXY(nave.x() - velocMovimento, nave.y());
+        }else if(event.key == 'ArrowRight'){
+            nave.setXY(nave.x() + velocMovimento, nave.y())
+        }
+    }
+})
 
 //Função game que pega elementos do body e configura elementos da pontuação, contem as funções de “pausar” e “iniciar”
 function Game(){
@@ -71,6 +87,10 @@ function Nave(imgNave = "wt"){
     //Método que captura a a largura e a altura da div da nav
     this.w = () => div.getBoundingClientRect().width;
     this.h = () => div.getBoundingClientRect().height;
+    
+    //Método que captura a posição da nave
+    this.x = () => div.getBoundingClientRect().x;
+    this.y = () => div.getBoundingClientRect().y;
 
     //Método que seta a posição inicial da nave
     this.setXY = (x, y) =>{
