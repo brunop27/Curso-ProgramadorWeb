@@ -94,8 +94,14 @@ function Nave(imgNave = "wt"){
 
     //Método que seta a posição inicial da nave
     this.setXY = (x, y) =>{
+        if(x<0){
+            x = 0;
+        }else if(x > game.w() - this.w()){
+            x = game.w() - this.w();
+        }
         div.style.left = `${x}px`;
         div.style.top = `${y}px`;
+        
     }
 
     //Método que calcula o posicionamento da nave referente a tela
