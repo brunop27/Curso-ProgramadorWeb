@@ -2,10 +2,12 @@
 const tela = document.getElementsByTagName("body")[0];
 //Instacia uma função chamada game na varia game
 const game = new Game();
-//Instancia da variável que criará a nave
+//Instancia da variável da nave jogador
 let nave;
 const velocMovimento = 10;
-
+//Instancia das variável da nave inimigo
+const maxInimigos = 10;
+const inimigos = [];
 
 //adicionando um evento á variavel “tela” com ‘keyup’ que recebe o valor do Enter quando clicado pelo usuario
 tela.addEventListener('keyup', function (event){
@@ -54,6 +56,16 @@ function Game(){
         //Verifica se a nave ja foi criada, se não, ela instancia e cria uma.
         if(nave == undefined){
             nave = new Nave();
+            for(let cont = 0; cont < maxInimigos; cont++){
+                let imagem = 'cp1';
+                switch(Math.round(Math.random() * 2)){
+                case 1: imagem = 'iba';
+                    break;
+                case 2: imagem = 'iy';
+                    break;
+                }
+                inimigos.push(new Inimigos(imagem));
+            }
         }
     };
 
@@ -114,4 +126,21 @@ function Nave(imgNave = "wt"){
 
     //Carrega a imagem com a posição setada
     iNave.onload = posicaoInicial;
+    //Toda vez que chamar a função onload, esta, receberá uma nova função que será a “fn”, que recebe o i.onload;
+    this.onload = (fn) => iNave.onload = fn;
+
+}
+//Instancia o objeto Nave(), herdando todas as características para criar o Inimigo
+function Inimigos(imagem = 'cp1'){
+    //Chama o objeto Nave, herdando todas as propriedades dela
+    Nave.call(this, imagem);
+
+    //Seta a posição do Inimigo
+    this.setPosicaoInicial = () => {
+        //Sorteia (a posição inicial do inimigo no X, Y
+        let x = Math.round(Math.random()*(game.w()-this.w()));
+        let y = Math.round(-this.h() - 10 - (Math.random()*500));
+        this.setXY(x, y);
+    }
+    this.onload(this.setPosicaoInicial);
 }
