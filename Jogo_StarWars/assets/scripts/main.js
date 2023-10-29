@@ -1,5 +1,5 @@
 //Capiturando o primeiro elemento 'body'
-const tela = document.getElementsByTagName("body")[0];
+const tela = document.getElementsByTagName('body')[0];
 //Instacia uma função chamada game na varia game
 const game = new Game();
 //Instancia da variável da nave jogador
@@ -8,14 +8,15 @@ const velocMovimento = 10;
 //Instancia das variável da nave inimigo
 const maxInimigos = 10;
 const inimigos = [];
+let intervalo;
 
 //adicionando um evento á variavel “tela” com ‘keyup’ que recebe o valor do Enter quando clicado pelo usuario
 tela.addEventListener('keyup', function (event){
 	if(event.key == 'Enter'){
 	//Chama o método isPause(), que retorna true/false, indicando se o jogo tá pausado ou não. Se for false, ele chama o método .start(), Se retornar true, chama o método pause()	
-    (game.isPause())? game.start():game.pause("Pause");	
+    (game.isPause()) ? game.start() : game.pause('Pause');	
 	}else if(event.key == 'p'){
-	game.pause("Pause");
+	game.pause('Pause');
     }
 });
 
@@ -34,7 +35,7 @@ tela.addEventListener('keydown', function(event){
     }
 })
 
-//Função game que pega elementos do body e configura elementos da pontuação, contem as funções de “pausar” e “iniciar”
+//Função game que pega elementos do body e configura elementos da pontuação, contem as funções de “pausar” e “iniciar” e outras ações envolvendo a nave do jogador e inimigo
 function Game(){
 	const painel = document.getElementById("painel");
 	const placar = document.getElementById("placar");
@@ -66,7 +67,13 @@ function Game(){
                 }
                 inimigos.push(new Inimigos(imagem));
             }
-        }
+        };
+        //Função que opera uma chamada de método, nesse caso, .animation() a cada 100segundos. Essa função percorrerá o array inimigos, ou seja, cada objeto inimigo criado e para cada objeto ele cama a função .animation()
+        intervalo = setInterval(() => {
+            inimigos.forEach(inimigo => {
+                inimigo.animation();
+            })
+        }, 500);
     };
 
 	//Método que pausa e mostra mensagem
@@ -112,8 +119,7 @@ function Nave(imgNave = "wt"){
             x = game.w() - this.w();
         }
         div.style.left = `${x}px`;
-        div.style.top = `${y}px`;
-        
+        div.style.top = `${y}px`;  
     }
 
     //Método que calcula o posicionamento da nave referente a tela
@@ -128,8 +134,8 @@ function Nave(imgNave = "wt"){
     iNave.onload = posicaoInicial;
     //Toda vez que chamar a função onload, esta, receberá uma nova função que será a “fn”, que recebe o i.onload;
     this.onload = (fn) => iNave.onload = fn;
-
 }
+
 //Instancia o objeto Nave(), herdando todas as características para criar o Inimigo
 function Inimigos(imagem = 'cp1'){
     //Chama o objeto Nave, herdando todas as propriedades dela
@@ -138,9 +144,20 @@ function Inimigos(imagem = 'cp1'){
     //Seta a posição do Inimigo
     this.setPosicaoInicial = () => {
         //Sorteia (a posição inicial do inimigo no X, Y
-        let x = Math.round(Math.random()*(game.w()-this.w()));
-        let y = Math.round(-this.h() - 10 - (Math.random()*500));
+        let x = Math.round(Math.random() * (game.w() - this.w()));
+        let y = Math.round(-this.h() - 10 - (Math.random()*1000));
         this.setXY(x, y);
     }
+
+    //Função que chama o método setXY, passando o valor fixo do eixo X(ja que ela não se move nesse eixo) e o valor do eixo Y multiplicado pelo variável velocMovimento
+    this.animation = () => {
+        this.setXY(this.x(), this.y() + velocMovimento);
+        //Condição que verifica se o objeto saiu da tela, que reseta a sua posição mandando para um valor inicial e resetando a posição desta
+        if(this.y() > game.h() + 20){
+            this.setPosicaoInicial();
+        };
+    }
+
+    //Função(herdada), acionada quando inicia o game
     this.onload(this.setPosicaoInicial);
 }
