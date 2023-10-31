@@ -21,8 +21,17 @@ tela.addEventListener('keyup', function (event){
 	game.pause('Pause');
     }
 
-    if(event.key == ' '){
-        nave.fire();
+    //condição usada para evitar que crie laser com o jogo pausado
+    if(!game.isPause()){
+        //Metodo que chama a função disparo da nave do jogador
+        if(event.key == ' '){
+            nave.fire();
+        }
+    
+        //Nova condição que verifica se a nave parou ou está parada
+        if(event.key == 'ArrowLeft' || event.key == 'ArrowRight'){
+            nave.moveStop();
+        }
     }
 });
 
@@ -34,9 +43,12 @@ tela.addEventListener('keydown', function(event){
         if(event.key == 'ArrowLeft'){
             //Variável "velocMovimento" será usada para mover a nave para esquerda(-) e direita(+)
             //Chama o objeto nave e acessa seu método setXY, lançando os valores da nave como parâmetro, passando o valor nave.X() para posição horizontal, e nave.Y() para vertical(valor fixo)
-            nave.setXY(nave.x() - velocMovimento, nave.y());
+            //nave.setXY(nave.x() - velocMovimento, nave.y());
+            //Alterado método de mover a nave do jogador, para método automatizado
+            nave.moveLeft();
         }else if(event.key == 'ArrowRight'){
-            nave.setXY(nave.x() + velocMovimento, nave.y())
+            //nave.setXY(nave.x() + velocMovimento, nave.y())
+            nave.moveRight();
         }
     }
 })
@@ -62,7 +74,8 @@ function Game(){
         pause = false;
         //Verifica se a nave ja foi criada, se não, ela instancia e cria uma.
         if(nave == undefined){
-            nave = new Nave();
+            //Cria o objeto NaveJogador(), linha alterada para semântica do código
+            nave = new NaveJogador();
             for(let cont = 0; cont < maxInimigos; cont++){
                 let imagem = 'cp1';
                 switch(Math.round(Math.random() * 2)){
@@ -76,6 +89,8 @@ function Game(){
         };
         //Função que opera uma chamada de método, nesse caso, .animation() a cada 100segundos. Essa função percorrerá o array inimigos, ou seja, cada objeto inimigo criado e para cada objeto ele cama a função .animation()
         intervalo = setInterval(() => {
+            //Chama o método que automatiza o movimento da nave do jogador
+            nave.animation();
             inimigos.forEach(inimigo => {
                 inimigo.animation();
             })
@@ -88,6 +103,7 @@ function Game(){
 	  placarMsg.textContent = mgs;
 	  pause = true;
       clearInterval(intervalo);
+      nave.moveStop();
     };	
 }
 
@@ -158,6 +174,35 @@ function Nave(imgNave = "wt"){
     //     div.style.top = `${y}px`;  
     // }
 
+    // //Método que calcula o posicionamento da nave referente a tela
+    // let posicaoInicial = () => {
+    //     this.setXY(
+    //         game.w()/2 - this.w()/2, //valor de X
+    //         game.h() - this.h() - 10
+    //     );
+    // }
+
+    // //Carrega a imagem com a posição setada
+    // iNave.onload = posicaoInicial;
+    
+    // //Toda vez que chamar a função onload, esta, receberá uma nova função que será a “fn”, que recebe o i.onload;
+    this.onload = (fn) => iNave.onload = fn;
+    
+    // //Metodo que cria o laser
+    // this.fire = () => {
+    //     let laser = new Laser();
+    //     let x = this.x() + this.w()/2 - laser.w()/2;
+    //     let y = this.y() - laser.h() - 1;
+    //     laser.setXY(x, y);
+    //     laser_jogador.push(laser);
+    // }
+}
+
+//Função usada para evitar bugs de disparo da nave do jogador
+function NaveJogador(imagem = 'wt'){
+    Nave.call(this, imagem);
+    //variavel que verifica qual lado a nave se movimenta
+    let deslocamento = 0;
     //Método que calcula o posicionamento da nave referente a tela
     let posicaoInicial = () => {
         this.setXY(
@@ -167,11 +212,8 @@ function Nave(imgNave = "wt"){
     }
 
     //Carrega a imagem com a posição setada
-    iNave.onload = posicaoInicial;
-    
-    //Toda vez que chamar a função onload, esta, receberá uma nova função que será a “fn”, que recebe o i.onload;
-    this.onload = (fn) => iNave.onload = fn;
-    
+    this.onload(posicaoInicial);
+
     //Metodo que cria o laser
     this.fire = () => {
         let laser = new Laser();
@@ -179,6 +221,17 @@ function Nave(imgNave = "wt"){
         let y = this.y() - laser.h() - 1;
         laser.setXY(x, y);
         laser_jogador.push(laser);
+    }
+
+    //Métodos que serão chamados e alterará a variável de acordo com seu movimento
+    this.moveStop = () => deslocamento = 0;
+    this.moveLeft = () => deslocamento = -1;
+    this.moveRight = () => deslocamento = 1;
+
+    //Função que automatiza o movimento da nave/ deixa mais fluido
+    this.animation = () => {
+        //esquerda, x = -1 /// direita, x = 1 /// nave para/parada, x = 0
+        this.setXY(this.x()+velocMovimento*deslocamento, this.y());
     }
 }
 
