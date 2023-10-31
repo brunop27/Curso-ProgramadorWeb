@@ -4,13 +4,17 @@ const tela = document.getElementsByTagName('body')[0];
 const game = new Game();
 //Instancia da variável da nave jogador
 let nave;
-
-const velocMovimento = 20;
-//Instancia das variável da nave inimigo
-const maxInimigos = 10;
-const inimigos = [];
+const velocMovimento = 15;
 const laser_jogador = [];
+//Instancia das variável da nave inimigo
+const maxInimigos = 5;
+const inimigos = [];
+const laser_inimigo = [];
+const delay_lasers = 15;
+//Variável usada para calcular intervalo
 let intervalo;
+
+const aceleracao_laser = 3;
 
 //adicionando um evento á variavel “tela” com ‘keyup’ que recebe o valor do Enter quando clicado pelo usuario
 tela.addEventListener('keyup', function (event){
@@ -93,8 +97,20 @@ function Game(){
             nave.animation();
             inimigos.forEach(inimigo => {
                 inimigo.animation();
-            })
-        }, 200);
+            });
+
+            //Chamando a função que gera a animação dos lasers
+            gerenciarLasers(laser_jogador);
+            gerenciarLasers(laser_inimigo);
+
+            //Condição necessária para gerar randomicamente os disparos das naves inimigas DEPOIS que passar da tela
+            let sorteio = Math.round(Math.random()*delay_lasers);
+            if(sorteio < inimigos.length){
+                if(inimigos[sorteio].y()>0){
+                    inimigos[sorteio].fire();
+                }
+            }
+        }, 100);
     };
 
 	//Método que pausa e mostra mensagem
@@ -257,6 +273,16 @@ function Inimigos(imagem = 'cp1'){
         };
     }
   
+    //Metodo que cria o laser do inimigo
+    this.fire = () => {
+        let laser = new Laser(true);
+        let x = this.x() + this.w()/2 - laser.w()/2;
+        let y = this.y() + this.h() + 1;
+        laser.setXY(x, y);
+        //chama o vetor 'laser_inimigo' e adiciona o objt 'laser'
+        laser_inimigo.push(laser);
+    }
+
     //Função(herdada), acionada quando inicia o game
     this.onload(this.setPosicaoInicial);
 }
@@ -272,8 +298,35 @@ function elemento(tag, classe){
 	return elemento;
 }
 
-//Função usada para criar o laser da nave do jogador
-function Laser(){
+//Função usada para criar o laser da nave do jogador e do inimigo
+function Laser(inimigo = false){
+    //Variável para operar o movimento do laser da nave do jogador/inimigo
+    let deslocamento = -1;
     let div = elemento('div','laser');
     Ovni.call(this, div);
+
+    //condição que muda o deslocamento do laser se for inimigo
+    if(inimigo){
+        div.classList.add('inimigo');
+        deslocamento = 1;
+    }
+
+    //Função que movimenta o laser de acordo com as respectivas variáveis
+    this.animation = () => {
+        this.setXY(this.x(), this.y()+velocMovimento*aceleracao_laser*deslocamento);
+    };
+
+    //Função que removerá a div/laser criado sempre que chamada
+    this.remove = () => div.remove();
+}
+
+//Função que gerencia os lasers, ou seja, remove chamando o método remover e cria a animação de acordo com os arrats
+function gerenciarLasers(lasers){
+    lasers.forEach((item, index, lista) => {
+        item.animation();
+        if(item.y()>game.h()+10 || item.y()+item.h()+10<0){
+            item.remove();
+            lista.splice(index, 1);
+        }
+    });
 }
