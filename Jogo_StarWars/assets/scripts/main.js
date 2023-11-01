@@ -10,10 +10,9 @@ const laser_jogador = [];
 const maxInimigos = 5;
 const inimigos = [];
 const laser_inimigo = [];
-const delay_lasers = 15;
+const delay_lasers = 18;
 //Variável usada para calcular intervalo
 let intervalo;
-
 const aceleracao_laser = 3;
 
 //adicionando um evento á variavel “tela” com ‘keyup’ que recebe o valor do Enter quando clicado pelo usuario
@@ -63,6 +62,7 @@ function Game(){
 	const placar = document.getElementById("placar");
 	const placarMsg = painel.querySelector(".msg");
 	let pause = true;
+    let pontuacao = 0;
 	
 	//Verifica se está “pausado”
 	this.isPause = () => pause;
@@ -110,6 +110,7 @@ function Game(){
                     inimigos[sorteio].fire();
                 }
             }
+            gerenciarColisoes();
         }, 100);
     };
 
@@ -120,7 +121,24 @@ function Game(){
 	  pause = true;
       clearInterval(intervalo);
       nave.moveStop();
-    };	
+    };
+
+    //Método que cria a ação de exibir a mensagem 'Game Over' na tela
+    this.gameOver = () => {
+        //Recicla o método pause(), passando apenas a mensagem a ser exibida
+        this.pause('Game Over');
+        //Função usada para 'resetar' o jogo depois do 'GameOver'
+        tela.addEventListener('keyup', function(event){
+            if(event.key == 'Enter'){
+                location.reload();
+            }
+        })
+    }
+
+    this.pontuar = () => {
+        pontuacao++;
+        placar.querySelector('span').textContent = pontuacao;
+    }
 }
 
 //Função criada para relacionar o objeto Nave() e objeto Laser, assim, recebendo a posição de um e outro, sem precisar instanciar um dentro do outro fugindo da POO
@@ -143,6 +161,11 @@ function Ovni(elemento){
         elemento.style.left = `${x}px`;
         elemento.style.top = `${y}px`;  
     };
+    
+    //Métodos responsáveis por tirar o elemento da tela
+    this.colisao = () => elemento.remove();
+    this.remove = () => elemento.remove();
+
 }
 
 //Objeto que cria a nave
@@ -249,6 +272,8 @@ function NaveJogador(imagem = 'wt'){
         //esquerda, x = -1 /// direita, x = 1 /// nave para/parada, x = 0
         this.setXY(this.x()+velocMovimento*deslocamento, this.y());
     }
+    //Ao ser chamada, aciona o método gameOver();
+    this.colisao = () => game.gameOver();
 }
 
 //Instancia o objeto Nave(), herdando todas as características para criar o Inimigo
@@ -285,6 +310,12 @@ function Inimigos(imagem = 'cp1'){
 
     //Função(herdada), acionada quando inicia o game
     this.onload(this.setPosicaoInicial);
+
+    //Chama uma nova 'posição' com o método setPosicaoInicial() e o método pontuar() que acrescenta um no 'pontuar'. Funcao usada para complementar a colisao
+    this.colisao = () => {
+        this.setPosicaoInicial();
+        game.pontuar();
+    }
 }
 
 //Função usada para reciclar códigos repetidos. A mesma, substitui a linhas que criam as div e adicionam nas telas
@@ -317,7 +348,7 @@ function Laser(inimigo = false){
     };
 
     //Função que removerá a div/laser criado sempre que chamada
-    this.remove = () => div.remove();
+    // this.remove = () => div.remove();
 }
 
 //Função que gerencia os lasers, ou seja, remove chamando o método remover e cria a animação de acordo com os arrats
@@ -329,4 +360,35 @@ function gerenciarLasers(lasers){
             lista.splice(index, 1);
         }
     });
+}
+
+//Funão que gerencia todas as colisões
+function gerenciarColisoes(){
+    let colisao = function(obj1, obj2){
+        //Recebe valor boleando no calculo da colisão dos objetos
+        let x = obj1.x() <= obj2.x() + obj2.w() && obj1.x() + obj1.w() >= obj2.x();
+        let y = obj1.y() <= obj2.y() + obj2.h() && obj1.y() + obj1.h() >= obj2.y();
+        //Se for verdadeiro, chama função colisão para cada objeto
+        if(x && y){
+            obj1.colisao();
+            obj2.colisao();
+            return true;
+        }
+        return false;
+    }
+
+    inimigos.forEach((inimigo, ii, inimigos)=>{
+        laser_jogador.forEach((laser,il, lasers)=>{
+            if(colisao(inimigo,laser)){
+                lasers.splice(il,1);
+            }
+        });
+
+        //Chama o função colisão() que verifica a colisão, retornando true ou false sempre que houver ou não a colisão de algum
+        colisao(nave,inimigo);
+    })
+    
+    laser_inimigo.forEach((laser)=>{
+        colisao(nave,laser);
+    })
 }
