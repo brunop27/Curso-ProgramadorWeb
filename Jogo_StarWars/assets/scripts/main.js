@@ -1,16 +1,20 @@
 //Capiturando o primeiro elemento 'body'
 const tela = document.getElementsByTagName('body')[0];
+
 //Instacia uma função chamada game na varia game
 const game = new Game();
+
 //Instancia da variável da nave jogador
 let nave;
 const velocMovimento = 15;
 const laser_jogador = [];
+
 //Instancia das variável da nave inimigo
 const maxInimigos = 5;
 const inimigos = [];
 const laser_inimigo = [];
 const delay_lasers = 18;
+
 //Variável usada para calcular intervalo
 let intervalo;
 const aceleracao_laser = 3;
@@ -18,10 +22,11 @@ const aceleracao_laser = 3;
 //adicionando um evento á variavel “tela” com ‘keyup’ que recebe o valor do Enter quando clicado pelo usuario
 tela.addEventListener('keyup', function (event){
 	if(event.key == 'Enter'){
+
 	//Chama o método isPause(), que retorna true/false, indicando se o jogo tá pausado ou não. Se for false, ele chama o método .start(), Se retornar true, chama o método pause()	
     (game.isPause()) ? game.start() : game.pause('Pause');	
 	}else if(event.key == 'p'){
-	game.pause('Pause');
+	    game.pause('Pause');
     }
 
     //condição usada para evitar que crie laser com o jogo pausado
@@ -76,6 +81,7 @@ function Game(){
         painel.style.display = "none";
         placar.style.display = "flex";
         pause = false;
+
         //Verifica se a nave ja foi criada, se não, ela instancia e cria uma.
         if(nave == undefined){
             //Cria o objeto NaveJogador(), linha alterada para semântica do código
@@ -91,6 +97,7 @@ function Game(){
                 inimigos.push(new Inimigos(imagem));
             }
         };
+
         //Função que opera uma chamada de método, nesse caso, .animation() a cada 100segundos. Essa função percorrerá o array inimigos, ou seja, cada objeto inimigo criado e para cada objeto ele cama a função .animation()
         intervalo = setInterval(() => {
             //Chama o método que automatiza o movimento da nave do jogador
@@ -165,7 +172,6 @@ function Ovni(elemento){
     //Métodos responsáveis por tirar o elemento da tela
     this.colisao = () => elemento.remove();
     this.remove = () => elemento.remove();
-
 }
 
 //Objeto que cria a nave
@@ -190,51 +196,10 @@ function Nave(imgNave = "wt"){
 
     //Adiciona a tag img criada acima dentro da div criada anteriormente
     div.appendChild(iNave);
-
-    //Adiciona a div na tela
-    // tela.appendChild(div);
-    
-    // //Método que captura a a largura e a altura da div da nav
-    // this.w = () => div.getBoundingClientRect().width;
-    // this.h = () => div.getBoundingClientRect().height;
-    
-    // //Método que captura a posição da nave
-    // this.x = () => div.getBoundingClientRect().x;
-    // this.y = () => div.getBoundingClientRect().y;
-
-    // //Método que seta a posição inicial da nave
-    // this.setXY = (x, y) =>{
-    //     if(x<0){
-    //         x = 0;
-    //     }else if(x > game.w() - this.w()){
-    //         x = game.w() - this.w();
-    //     }
-    //     div.style.left = `${x}px`;
-    //     div.style.top = `${y}px`;  
-    // }
-
-    // //Método que calcula o posicionamento da nave referente a tela
-    // let posicaoInicial = () => {
-    //     this.setXY(
-    //         game.w()/2 - this.w()/2, //valor de X
-    //         game.h() - this.h() - 10
-    //     );
-    // }
-
-    // //Carrega a imagem com a posição setada
-    // iNave.onload = posicaoInicial;
     
     // //Toda vez que chamar a função onload, esta, receberá uma nova função que será a “fn”, que recebe o i.onload;
     this.onload = (fn) => iNave.onload = fn;
     
-    // //Metodo que cria o laser
-    // this.fire = () => {
-    //     let laser = new Laser();
-    //     let x = this.x() + this.w()/2 - laser.w()/2;
-    //     let y = this.y() - laser.h() - 1;
-    //     laser.setXY(x, y);
-    //     laser_jogador.push(laser);
-    // }
 }
 
 //Função usada para evitar bugs de disparo da nave do jogador
@@ -313,8 +278,15 @@ function Inimigos(imagem = 'cp1'){
 
     //Chama uma nova 'posição' com o método setPosicaoInicial() e o método pontuar() que acrescenta um no 'pontuar'. Funcao usada para complementar a colisao
     this.colisao = () => {
-        this.setPosicaoInicial();
         game.pontuar();
+        let explosao  = elemento('img', 'explosao');
+        explosao.src = "assets/images/explotion.gif";
+        explosao = new Ovni(explosao);
+        explosao.setXY(this.x(), this.y());
+        this.setPosicaoInicial();
+        setTimeout(()=>{
+            explosao.remove();
+        },900);
     }
 }
 
